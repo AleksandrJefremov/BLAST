@@ -27,14 +27,17 @@
     function preload() {
         console.log("Preloading assets...");
         this.load.image('background', 'assets/background.png');
-        this.load.image('player', 'assets/player.png');
+        this.load.spritesheet('character', 'assets/char/Top_Down_Survivor/knife/move/survivor-move_knife_.png', {
+        frameWidth: 32, // Adjust to the actual width of each frame
+        frameHeight: 32, // Adjust to the actual height of each frame
+    });
     }
 
     function create() {
         console.log("Creating the game...");
         this.add.image(400, 300, 'background');
-        this.player = this.add.sprite(100, 450, 'player');
         this.cursors = this.input.keyboard.createCursorKeys();
+
     }
 
     function update() {
@@ -44,6 +47,18 @@
         } else if (this.cursors.right.isDown) {
             this.player.x += 5;
         }
+
+        this.anims.create({
+        key: 'character_anim',
+        frames: this.anims.generateFrameNumbers('character', { start: 0, end: 19 }),
+        frameRate: 10, // Adjust to your desired frame rate
+        repeat: -1, // -1 means repeat indefinitely
+    });
+
+    // Add a sprite and play the animation
+    const character = this.add.sprite(400, 300, 'character');
+    character.play('character_anim');
+
     }
 </script>
 
