@@ -27,7 +27,7 @@
     function preload() {
         console.log("Preloading assets...");
         this.load.image('background', 'assets/background.png');
-        this.load.spritesheet('character', 'assets/char/Top_Down_Survivor/knife/move/', {
+        this.load.spritesheet('character', 'assets/anim/kalle/reload2.png', {
         frameWidth: 32, // Adjust to the actual width of each frame
         frameHeight: 32, // Adjust to the actual height of each frame
     });
@@ -41,7 +41,7 @@
             // Create animation
     this.anims.create({
         key: 'character_anim',
-        frames: this.anims.generateFrameNumbers('character', { start: 0, end: 18 }),
+        frames: this.anims.generateFrameNumbers('character', { start: 0, end: 19 }),
         frameRate: 10, // Adjust to your desired frame rate
         repeat: -1, // -1 means repeat indefinitely
     });
