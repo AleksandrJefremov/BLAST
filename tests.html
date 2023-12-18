@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phaser 3 Animation Example</title>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js"></script>
+</head>
+<body>
+
+<script>
+    var config = {
+        type: Phaser.AUTO,
+        width: 800,
+        height: 600,
+        scene: {
+            preload: preload,
+            create: create,
+            update: update
+        },
+        backgroundColor: '#ffffff' // Set the background color to white
+    };
+
+    var game = new Phaser.Game(config);
+
+    var player;
+    var spriteIndex = 1;
+    var spriteMapping = {
+        '1': { columns: 5, rows: 4 },
+        '2': { columns: 5, rows: 3 },
+        '3': { columns: 5, rows: 4 }
+    };
+    function preload() {
+        // Load your three spritesheets or images for animation
+        for (var key in spriteMapping) {
+            var spriteInfo = spriteMapping[key];
+            this.load.spritesheet(key, 'assets/anim/kalle/' + key + '.png', { frameWidth: spriteInfo.frameWidth, frameHeight: spriteInfo.frameHeight, endFrame: spriteInfo.frames });
+        }
+    }
+
+    function create() {
+        // Create animations for each sprite
+        for (var key in spriteMapping) {
+            var spriteInfo = spriteMapping[key];
+            this.anims.create({
+                key: 'walk_' + key,
+                frames: this.anims.generateFrameNumbers(key, { start: 0, end: spriteInfo.frames - 1 }),
+                frameRate: 10,
+                repeat: -1
+            });
+        }
+
+        // Place the player sprite in the middle of the screen
+        player = this.add.sprite(config.width / 2, config.height / 2, 'player1');
+        player.setScale(0.5); // Adjust the scale to make the player smaller
+        player.anims.play('walk_', true);
+
+        // Example: Switch sprites when the keys 1, 2, or 3 are pressed
+        this.input.keyboard.on('keydown-1', function (event) {
+            switchSprite('1');
+        });
+
+        this.input.keyboard.on('keydown-2', function (event) {
+            switchSprite('2');
+        });
+
+        this.input.keyboard.on('keydown-3', function (event) {
+            switchSprite('3');
+        });
+    }
+
+    function update() {
+        // Game logic goes here
+    }
+
+    function switchSprite(spriteKey) {
+        // Stop the current animation
+        player.anims.stop();
+
+        // Change the texture of the player sprite and play the new animation
+        player.setTexture(spriteKey);
+        player.anims.play('walk_' + spriteKey, true);
+    }
+</script>
+
+</body>
+</html>
