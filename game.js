@@ -1,21 +1,24 @@
 // Configuration for the game
 const config = {
-    type: Phaser.AUTO,
-    width: 800,
-    height: 600,
-    physics: {
-      default: 'arcade',
-      arcade: {
-        gravity: { y: 0 },
-        debug: false,
-      },
+  type: Phaser.AUTO,
+  width: 800,
+  height: 600,
+  scale: {
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+  },
+  physics: {
+    default: 'arcade',
+    arcade: {
+      debug: false,
     },
-    scene: {
-      preload: preload,
-      create: create,
-      update: update,
-    },
-  };
+  },
+  scene: {
+    create: create,
+    update: update,
+    preload: preload
+  },
+};
   
   // Create a Phaser game with the configuration
   const game = new Phaser.Game(config);
