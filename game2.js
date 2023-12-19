@@ -64,13 +64,20 @@ function create() {
     callbackScope: this,
     loop: true, // Set to true for continuous spawning
   });
+
+  this.anims.create({
+    key: 'enemyAnimation',
+    frames: this.anims.generateFrameNumbers('enemy', { start: 0, end: 14 }), // Adjust frame numbers
+    frameRate: 10, // Adjust frame rate
+    repeat: -1, // Set to -1 for looping
+  });
 }
 
 function update(time, delta) {
     playerSpeed = 200
     handleInput.bind(this)(delta, playerSpeed);
     lookAtCursor.bind(this)();
-    updateEnemyRotation.bind(this)();
+    enemiesControl.bind(this)();
 
 }
 
@@ -113,16 +120,21 @@ function lookAtCursor() {
     player.rotation = angleToPointer;
 }
 
-function updateEnemyRotation() {
-    // Update enemy rotation to face the player
-    enemies.getChildren().forEach(function (enemy) {
+function enemiesControl() {
+  // Update enemy rotation to face the player
+  enemies.getChildren().forEach(function (enemy) {
       const angleToPlayer = Phaser.Math.Angle.Between(enemy.x, enemy.y, player.x, player.y);
       enemy.rotation = angleToPlayer;
 
+      const distanceToPlayer = Phaser.Math.Distance.Between(enemy.x, enemy.y, player.x, player.y);
       const speed = 100; // Adjust the speed as needed
-    enemy.setVelocity(speed * Math.cos(angleToPlayer), speed * Math.sin(angleToPlayer));s
-    });
-    
+
+      if (distanceToPlayer < 30) { // Adjust the distance threshold as needed
+          enemy.setVelocity(0, 0); // Stop moving
+      } else {
+          enemy.setVelocity(speed * Math.cos(angleToPlayer), speed * Math.sin(angleToPlayer));
+      }
+  });
 }
   
   
