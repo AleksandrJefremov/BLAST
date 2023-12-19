@@ -69,6 +69,7 @@ function create() {
 
   this.physics.add.collider(bullets, enemies, bulletHitEnemy);
 
+
   
   createHUD.bind(this)();
 
@@ -106,6 +107,11 @@ function update(time, delta) {
       shootBullet.bind(this)();
   }
 
+
+}
+
+function death(){
+  dead = 1;
 }
 
 function createHUD() {
@@ -153,7 +159,7 @@ function bulletHitEnemy(bullet, enemy) {
 
     // Update the HUD text
     hudText.setText('Kills: ' + score);
-    dead = 1;
+
 
   // You can add additional logic or scoring here if needed
 }
@@ -206,9 +212,15 @@ function enemiesControl() {
       const distanceToPlayer = Phaser.Math.Distance.Between(enemy.x, enemy.y, player.x, player.y);
       const speed = 100; // Adjust the speed as needed
 
-      if (distanceToPlayer < 30) { // Adjust the distance threshold as needed
+      if (distanceToPlayer < 10) { // Adjust the distance threshold as needed
         enemy.setVelocity(0, 0); // Stop moving
         enemy.anims.play('enemyAnimation', true); // Play animation
+        dead = 1;
+        setTimeout(() => {
+          // Change 'your-page.html' to the actual HTML page you want to redirect to
+          window.location.href = 'your-page.html';
+      }, 2000);
+
     } else if(distanceToPlayer < 100){
       enemy.setVelocity(speed * Math.cos(angleToPlayer), speed * Math.sin(angleToPlayer));
       enemy.anims.play('enemyAnimation', true); // Play animation
