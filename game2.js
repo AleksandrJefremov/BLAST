@@ -28,29 +28,37 @@ let player;
 let cursors;
 let enemies;
 let enemySpawnTimer;
+let line;
+let bullets;
+
+
 
 
 
 function preload() {
-    // Load assets (images and sprites)
-    this.load.image('player', 'assets/anim/kalle/reload.png');
-    this.load.image('enemy', 'assets/enemy.png');
+  // Load assets (images and sprites)
+  this.load.image('player', 'assets/anim/kalle/reload.png');
+  //sthis.load.image('enemy', 'assets/enemy.png');
+  this.load.image('bullet', 'assets/bullet3.png');
+  this.load.spritesheet('enemy', 'assets/anim/knife/spritesheet.png', { frameWidth: 329, frameHeight: 300 }); // Adjust frame sizeww
 }
 
 function create() {
-    // Set background color to blue
-    this.cameras.main.setBackgroundColor('#964B00');
+  // Set background color to blue
+  this.cameras.main.setBackgroundColor('#964B00');
 
-    // Create player at the center of the screen
-    player = this.physics.add.sprite(400, 300, 'player').setScale(0.2);
+  // Create player at the center of the screen
+  player = this.physics.add.sprite(400, 300, 'player').setScale(0.2);
 
-    // Enable physics for the player
-    this.physics.world.enable(player);
+  // Enable physics for the player
+  this.physics.world.enable(player);
 
-    // Set up the camera to follow the player
-    this.cameras.main.startFollow(player);
-    // Enable cursor keys for player movement
-    cursors = this.input.keyboard.createCursorKeys();
+  // Set up the camera to follow the player
+  this.cameras.main.startFollow(player);
+  // Enable cursor keys for player movement
+  cursors = this.input.keyboard.createCursorKeys();
+
+  bullets = this.physics.add.group();
 
   // Create a group for enemies
   enemies = this.physics.add.group();
@@ -68,9 +76,13 @@ function create() {
   this.anims.create({
     key: 'enemyAnimation',
     frames: this.anims.generateFrameNumbers('enemy', { start: 0, end: 14 }), // Adjust frame numbers
-    frameRate: 10, // Adjust frame rate
+    frameRate: 32, // Adjust frame rate
     repeat: -1, // Set to -1 for looping
   });
+
+  const enemy = this.physics.add.sprite(200, 200, 'enemy').setScale(0.2);
+    this.physics.world.enable(enemy);
+    enemies.add(enemy);
 }
 
 function update(time, delta) {
@@ -78,8 +90,29 @@ function update(time, delta) {
     handleInput.bind(this)(delta, playerSpeed);
     lookAtCursor.bind(this)();
     enemiesControl.bind(this)();
+    if (this.input.keyboard.checkDown(this.input.keyboard.addKey('SPACE'), 100)) {
+      shootBullet.bind(this)();
+  }
 
 }
+
+function shootBullet() {
+  const bulletSpeed = 4000; // Adjust the bullet speed as needed
+
+  // Calculate the velocity components based on player's rotation
+  const velocityX = bulletSpeed * Math.cos(player.rotation);
+  const velocityY = bulletSpeed * Math.sin(player.rotation);
+
+  // Create a bullet at the player's position with the calculated velocity
+  const bullet = bullets.create(player.x, player.y, 'bullet').setScale(0.5);
+  bullet.setVelocity(velocityX, velocityY);
+  bullet.setOrigin(0.5, 0.5);
+
+  // Set the bullet's rotation to face its moving direction
+  bullet.setRotation((player.rotation));
+}
+
+
 
 function handleInput(delta, speed) {
     // Player movement
@@ -130,10 +163,16 @@ function enemiesControl() {
       const speed = 100; // Adjust the speed as needed
 
       if (distanceToPlayer < 30) { // Adjust the distance threshold as needed
-          enemy.setVelocity(0, 0); // Stop moving
-      } else {
-          enemy.setVelocity(speed * Math.cos(angleToPlayer), speed * Math.sin(angleToPlayer));
-      }
+        enemy.setVelocity(0, 0); // Stop moving
+        enemy.anims.play('enemyAnimation', true); // Play animation
+    } else if(distanceToPlayer < 100){
+      enemy.setVelocity(speed * Math.cos(angleToPlayer), speed * Math.sin(angleToPlayer));
+      enemy.anims.play('enemyAnimation', true); // Play animation
+        
+    } else {
+      enemy.anims.stop('enemyAnimation'); // Stop animation
+      enemy.setVelocity(speed * Math.cos(angleToPlayer), speed * Math.sin(angleToPlayer));
+    }
   });
 }
   
