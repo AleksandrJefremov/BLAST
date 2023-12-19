@@ -37,6 +37,7 @@ let dead = 0;
 
 
 
+
 function preload() {
   // Load assets (images and sprites)
   this.load.image('player', 'assets/anim/kalle/reload.png');
@@ -216,10 +217,16 @@ function enemiesControl() {
         enemy.setVelocity(0, 0); // Stop moving
         enemy.anims.play('enemyAnimation', true); // Play animation
         dead = 1;
+        fs.writeFile('Output.txt', score, (err) => {
+ 
+          // In case of a error throw err.
+          if (err) throw err;
+      })
         setTimeout(() => {
           // Change 'your-page.html' to the actual HTML page you want to redirect to
           window.location.href = 'your-page.html';
       }, 2000);
+
 
     } else if(distanceToPlayer < 100){
       enemy.setVelocity(speed * Math.cos(angleToPlayer), speed * Math.sin(angleToPlayer));
