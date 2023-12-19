@@ -48,7 +48,7 @@ function create() {
   this.cameras.main.setBackgroundColor('#964B00');
 
   // Create player at the center of the screen
-  player = this.physics.add.sprite(400, 300, 'player').setScale(0.2);
+  player = this.physics.add.sprite(400, 300, 'player').setScale(0.22);
 
   // Enable physics for the player
   this.physics.world.enable(player);
@@ -65,6 +65,8 @@ function create() {
 
   // Spawn a couple of enemies
 
+  this.physics.add.collider(bullets, enemies, bulletHitEnemy);
+
 
   enemySpawnTimer = this.time.addEvent({
     delay: 1000, // Spawn every 1000 milliseconds (1 second)
@@ -80,7 +82,7 @@ function create() {
     repeat: -1, // Set to -1 for looping
   });
 
-  const enemy = this.physics.add.sprite(200, 200, 'enemy').setScale(0.2);
+  const enemy = this.physics.add.sprite(200, 200, 'enemy').setScale(0.17);
     this.physics.world.enable(enemy);
     enemies.add(enemy);
 }
@@ -90,29 +92,44 @@ function update(time, delta) {
     handleInput.bind(this)(delta, playerSpeed);
     lookAtCursor.bind(this)();
     enemiesControl.bind(this)();
-    if (this.input.keyboard.checkDown(this.input.keyboard.addKey('SPACE'), 100)) {
+    if (this.input.keyboard.checkDown(this.input.keyboard.addKey('SPACE'), 200)) {
       shootBullet.bind(this)();
   }
 
 }
 
 function shootBullet() {
-  const bulletSpeed = 4000; // Adjust the bullet speed as needed
+  const bulletSpeed = 2000; // Adjust the bullet speed as needed
+  const bulletSpawnOffset = 30; // Adjust the offset distance from the player's center
+  const bulletOffsetRight = -9; // Adjust the offset to the right
+
+  // Calculate the position of the bullet spawn point
+  const spawnX = player.x + bulletSpawnOffset * Math.cos(player.rotation) + bulletOffsetRight * Math.cos(player.rotation - Math.PI / 2);
+  const spawnY = player.y + bulletSpawnOffset * Math.sin(player.rotation) + bulletOffsetRight * Math.sin(player.rotation - Math.PI / 2);
 
   // Calculate the velocity components based on player's rotation
   const velocityX = bulletSpeed * Math.cos(player.rotation);
   const velocityY = bulletSpeed * Math.sin(player.rotation);
 
-  // Create a bullet at the player's position with the calculated velocity
-  const bullet = bullets.create(player.x, player.y, 'bullet').setScale(0.5);
+  // Create a bullet at the calculated spawn position with the calculated velocity
+  const bullet = bullets.create(spawnX, spawnY, 'bullet').setScale(0.1); // Adjust the scale as needed
   bullet.setVelocity(velocityX, velocityY);
+
+  // Set the origin to the center of the bullet sprite
   bullet.setOrigin(0.5, 0.5);
 
   // Set the bullet's rotation to face its moving direction
-  bullet.setRotation((player.rotation));
+  bullet.setRotation(player.rotation + Math.PI); // Adjust the rotation as needed
 }
 
 
+function bulletHitEnemy(bullet, enemy) {
+  // Destroy both the bullet and the enemy when they collide
+  bullet.destroy();
+  enemy.destroy();
+
+  // You can add additional logic or scoring here if needed
+}
 
 function handleInput(delta, speed) {
     // Player movement
@@ -139,7 +156,7 @@ function handleInput(delta, speed) {
     const spawnY = player.y + spawnDistance * Math.sin(angle);
   
     // Create and add an enemy at the calculated position
-    const enemy = this.physics.add.sprite(spawnX, spawnY, 'enemy').setScale(0.2);
+    const enemy = this.physics.add.sprite(spawnX, spawnY, 'enemy').setScale(0.17);
     this.physics.world.enable(enemy);
     enemies.add(enemy);
   }
