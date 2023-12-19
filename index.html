@@ -9,61 +9,7 @@
 </head>
 <body>
 
-<script>
-    // Phaser 3 game script
-    const config = {
-        type: Phaser.AUTO,
-        width: 800,
-        height: 600,
-        scene: {
-            preload: preload,
-            create: create,
-            update: update
-        }
-    };
-
-    const game = new Phaser.Game(config);
-
-    function preload() {
-        console.log("Preloading assets...");
-        this.load.image('background', 'assets/background.png');
-        this.load.spritesheet('character', 'assets/anim/kalle/reload2.png', {
-        frameWidth: 32, // Adjust to the actual width of each frame
-        frameHeight: 32, // Adjust to the actual height of each frame
-    });
-    }
-
-    function create() {
-        console.log("Creating the game...");
-        this.add.image(400, 300, 'background');
-        this.cursors = this.input.keyboard.createCursorKeys();
-
-            // Create animation
-    this.anims.create({
-        key: 'character_anim',
-        frames: this.anims.generateFrameNumbers('character', { start: 0, end: 19 }),
-        frameRate: 10, // Adjust to your desired frame rate
-        repeat: -1, // -1 means repeat indefinitely
-    });
-
-    // Add a sprite and play the animation
-    const character = this.add.sprite(400, 300, 'character');
-    character.play('character_anim');
-
-
-    }
-
-    function update() {
-        console.log("Updating the game...");
-        if (this.cursors.left.isDown) {
-            this.player.x -= 5;
-        } else if (this.cursors.right.isDown) {
-            this.player.x += 5;
-        }
-
-
-    }
-</script>
+<script src="game2.js"></script>
 
 </body>
 </html>
