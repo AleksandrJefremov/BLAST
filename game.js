@@ -1,3 +1,5 @@
+
+
 // Configuration for the game
 const config = {
   type: Phaser.AUTO,
@@ -172,26 +174,3 @@ function handlePlayerDeath() {
   console.log("Player died! Show death screen or perform other actions.");
 }
 
-function handlePlayerMovement() {
-  // Player movement
-  const moveX = (cursors.up.isDown || this.input.keyboard.addKey('W').isDown) - (cursors.down.isDown || this.input.keyboard.addKey('S').isDown);
-  const moveY = (cursors.up.isDown || this.input.keyboard.addKey('W').isDown) - (cursors.down.isDown || this.input.keyboard.addKey('S').isDown);
-
-  // Strafing left/right
-  const strafeX = (this.input.keyboard.addKey('A').isDown ? -1 : 0) + (this.input.keyboard.addKey('D').isDown ? 1 : 0);
-
-  // Calculate velocity components
-  const velocityX = moveX * Math.cos(player.rotation) + strafeX * Math.cos(player.rotation - Math.PI / 2);
-  const velocityY = moveY * Math.sin(player.rotation) + strafeX * Math.sin(player.rotation - Math.PI / 2);
-
-  // Normalize the velocity vector
-  const magnitude = Math.sqrt(velocityX ** 2 + velocityY ** 2);
-  if (magnitude > 1) {
-    velocityX /= magnitude;
-    velocityY /= magnitude;
-  }
-
-  // Set the player velocity
-  player.setVelocityX(maxSpeed * velocityX);
-  player.setVelocityY(maxSpeed * velocityY);
-}
