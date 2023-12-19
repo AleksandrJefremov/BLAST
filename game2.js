@@ -30,6 +30,8 @@ let enemies;
 let enemySpawnTimer;
 let line;
 let bullets;
+let score = 0;
+let dead = 0;
 
 
 
@@ -45,7 +47,7 @@ function preload() {
 
 function create() {
   // Set background color to blue
-  this.cameras.main.setBackgroundColor('#964B00');
+  this.cameras.main.setBackgroundColor('#5C4033');
 
   // Create player at the center of the screen
   player = this.physics.add.sprite(400, 300, 'player').setScale(0.22);
@@ -66,6 +68,9 @@ function create() {
   // Spawn a couple of enemies
 
   this.physics.add.collider(bullets, enemies, bulletHitEnemy);
+
+  
+  createHUD.bind(this)();
 
 
   enemySpawnTimer = this.time.addEvent({
@@ -89,13 +94,29 @@ function create() {
 
 function update(time, delta) {
     playerSpeed = 200
+
+    if (dead == 0){
     handleInput.bind(this)(delta, playerSpeed);
     lookAtCursor.bind(this)();
+    } 
+
+
     enemiesControl.bind(this)();
     if (this.input.keyboard.checkDown(this.input.keyboard.addKey('SPACE'), 200)) {
       shootBullet.bind(this)();
   }
 
+}
+
+function createHUD() {
+  // Create a text element for the score
+  hudText = this.add.text(16, 16, 'Kills: 0', {
+      fontFamily: 'Arial',
+      fontSize: '24px',
+      fill: '#fff'
+  }).setScrollFactor(0); // Make it fixed on the camera
+
+  // You can add more HUD elements as needed
 }
 
 function shootBullet() {
@@ -127,6 +148,12 @@ function bulletHitEnemy(bullet, enemy) {
   // Destroy both the bullet and the enemy when they collide
   bullet.destroy();
   enemy.destroy();
+ 
+  score += 1;
+
+    // Update the HUD text
+    hudText.setText('Kills: ' + score);
+    dead = 1;
 
   // You can add additional logic or scoring here if needed
 }
