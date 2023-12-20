@@ -32,6 +32,7 @@ let line;
 let bullets;
 let score = 0;
 let dead = 0;
+let background;
 
 
 
@@ -44,11 +45,12 @@ function preload() {
   //sthis.load.image('enemy', 'assets/enemy.png');
   this.load.image('bullet', 'assets/bullet3.png');
   this.load.spritesheet('enemy', 'assets/anim/knife/spritesheet.png', { frameWidth: 329, frameHeight: 300 }); // Adjust frame sizeww
+  this.load.image('background', 'assets/background2.png');
 }
 
 function create() {
   // Set background color to blue
-  this.cameras.main.setBackgroundColor('#5C4033');
+  const background = this.add.tileSprite(400, 300, 800, 600, 'background');
 
   // Create player at the center of the screen
   player = this.physics.add.sprite(400, 300, 'player').setScale(0.22);
@@ -109,6 +111,20 @@ function update(time, delta) {
     if (this.input.keyboard.checkDown(this.input.keyboard.addKey('SPACE'), 200)) {
       shootBullet.bind(this)();
   }
+
+  const camera = this.cameras.main;
+
+    // Adjust the factor based on the speed of the repeating background
+    background.tilePositionX += 1; // Adjust the speed as needed
+    background.tilePositionY += 1;
+
+    // Reset positions to keep the background repeating infinitely
+    if (background.tilePositionX > background.width) {
+        background.tilePositionX = 0;
+    }
+    if (background.tilePositionY > background.height) {
+        background.tilePositionY = 0;
+    }
 
 
 }
@@ -219,11 +235,11 @@ function enemiesControl() {
         enemy.setVelocity(0, 0); // Stop moving
         enemy.anims.play('enemyAnimation', true); // Play animation
         dead = 1;
-        
+        /*
         setTimeout(() => {
           // Change 'your-page.html' to the actual HTML page you want to redirect to
           window.location.href = 'gameOver.html';
-      }, 2000);
+      }, 2000);*/
 
 
     } else if(distanceToPlayer < 100){
