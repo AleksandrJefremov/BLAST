@@ -115,11 +115,15 @@ function update(time, delta) {
     if (dead == 0){
     handleInput.bind(this)(delta, playerSpeed);
     lookAtCursor.bind(this)();
-    if (this.input.keyboard.checkDown(this.input.keyboard.addKey('SPACE'), 100)) {
-      this.shotSound.play();  // Play the shot sound
-      shootBullet.bind(this)();  // Call the shootBullet function
+    if (
+      this.input.keyboard.checkDown(this.input.keyboard.addKey('SPACE'), 100) ||
+      (this.input.activePointer.isDown && this.input.mousePointer.durationDown >= 100)
+    ) {
+      this.shotSound.play();
+      shootBullet.bind(this)();
+    }
+    
   }
-    } 
 
 
     enemiesControl.bind(this)();
