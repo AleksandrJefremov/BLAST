@@ -46,6 +46,10 @@ function preload() {
   this.load.image('bullet', 'assets/bullet3.png');
   this.load.spritesheet('enemy', 'assets/anim/knife/spritesheet.png', { frameWidth: 329, frameHeight: 300 }); // Adjust frame sizeww
   this.load.image('background', 'assets/background2.png');
+  this.load.audio('shotFired', 'assets/shot2.mp3');
+  this.load.audio('backgroundMusic', 'assets/GTA4.ogg');
+
+
 }
 
 function create() {
@@ -62,6 +66,13 @@ function create() {
   this.cameras.main.startFollow(player);
   // Enable cursor keys for player movement
   cursors = this.input.keyboard.createCursorKeys();
+
+  this.shotSound = this.sound.add('shotFired', { loop: false });
+  this.backgroundMusic = this.sound.add('backgroundMusic');
+
+  // Play the background music and set loop to true
+  this.backgroundMusic.play({ loop: true });
+  
 
   bullets = this.physics.add.group();
 
@@ -104,13 +115,15 @@ function update(time, delta) {
     if (dead == 0){
     handleInput.bind(this)(delta, playerSpeed);
     lookAtCursor.bind(this)();
+    if (this.input.keyboard.checkDown(this.input.keyboard.addKey('SPACE'), 100)) {
+      this.shotSound.play();  // Play the shot sound
+      shootBullet.bind(this)();  // Call the shootBullet function
+  }
     } 
 
 
     enemiesControl.bind(this)();
-    if (this.input.keyboard.checkDown(this.input.keyboard.addKey('SPACE'), 200)) {
-      shootBullet.bind(this)();
-  }
+    
 
 
 }
@@ -221,7 +234,7 @@ function enemiesControl() {
         enemy.setVelocity(0, 0); // Stop moving
         enemy.anims.play('enemyAnimation', true); // Play animation
         dead = 1;
-        
+        player.setVelocity(0, 0);
         setTimeout(() => {
           // Change 'your-page.html' to the actual HTML page you want to redirect to
           window.location.href = 'gameOver.html';
