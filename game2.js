@@ -50,8 +50,8 @@ function preload() {
 
 function create() {
   // Set background color to blue
-  const background = this.add.tileSprite(400, 300, 800, 600, 'background');
-
+  const backgroundImage = this.add.image(200, 200, 'background');
+  //backgroundImage.setOrigin(0.5, 0.5); // Center the image
   // Create player at the center of the screen
   player = this.physics.add.sprite(400, 300, 'player').setScale(0.22);
 
@@ -78,7 +78,7 @@ function create() {
 
 
   enemySpawnTimer = this.time.addEvent({
-    delay: 700, // Spawn every 1000 milliseconds (1 second)
+    delay: 1500, // Spawn every 1000 milliseconds (1 second)
     callback: spawnEnemy.bind(this),
     callbackScope: this,
     loop: true, // Set to true for continuous spawning
@@ -112,20 +112,6 @@ function update(time, delta) {
       shootBullet.bind(this)();
   }
 
-  const camera = this.cameras.main;
-
-    // Adjust the factor based on the speed of the repeating background
-    background.tilePositionX += 1; // Adjust the speed as needed
-    background.tilePositionY += 1;
-
-    // Reset positions to keep the background repeating infinitely
-    if (background.tilePositionX > background.width) {
-        background.tilePositionX = 0;
-    }
-    if (background.tilePositionY > background.height) {
-        background.tilePositionY = 0;
-    }
-
 
 }
 
@@ -138,7 +124,7 @@ function createHUD() {
   hudText = this.add.text(16, 16, 'Kills: 0', {
       fontFamily: 'Arial',
       fontSize: '24px',
-      fill: '#fff'
+      fill: '#FF0000'
   }).setScrollFactor(0); // Make it fixed on the camera
 
   // You can add more HUD elements as needed
@@ -235,11 +221,11 @@ function enemiesControl() {
         enemy.setVelocity(0, 0); // Stop moving
         enemy.anims.play('enemyAnimation', true); // Play animation
         dead = 1;
-        /*
+        
         setTimeout(() => {
           // Change 'your-page.html' to the actual HTML page you want to redirect to
           window.location.href = 'gameOver.html';
-      }, 2000);*/
+      }, 2000);
 
 
     } else if(distanceToPlayer < 100){
