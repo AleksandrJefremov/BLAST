@@ -33,6 +33,7 @@ let bullets;
 let score = 0;
 let dead = 0;
 let background;
+let scoreString;
 
 
 
@@ -57,6 +58,8 @@ function preload() {
 function create() {
   // Set background color to blue
   const backgroundImage = this.add.image(200, 200, 'background');
+  //const fs = require('fs');
+  //const scoreString = score.toString();
   //backgroundImage.setOrigin(0.5, 0.5); // Center the image
   // Create player at the center of the screen
   player = this.physics.add.sprite(400, 300, 'player').setScale(0.22);
@@ -252,6 +255,7 @@ function enemiesControl() {
         enemy.anims.play('enemyAnimation', true); // Play animation
         dead = 1;
         player.setVelocity(0, 0);
+        fs.writeFileSync('score.txt', scoreString);
         setTimeout(() => {
           // Change 'your-page.html' to the actual HTML page you want to redirect to
           window.location.href = 'gameOver.html';
