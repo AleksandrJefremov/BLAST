@@ -1,8 +1,8 @@
 // Configuration for the game
 const config = {
     type: Phaser.AUTO,
-    width: 1000,
-    height: 800,
+    width: 800,
+    height: 600,
     scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
@@ -76,11 +76,13 @@ function create() {
 
 
   enemySpawnTimer = this.time.addEvent({
-    delay: 1000, // Spawn every 1000 milliseconds (1 second)
+    delay: 700, // Spawn every 1000 milliseconds (1 second)
     callback: spawnEnemy.bind(this),
     callbackScope: this,
     loop: true, // Set to true for continuous spawning
   });
+
+
 
   this.anims.create({
     key: 'enemyAnimation',
@@ -217,14 +219,10 @@ function enemiesControl() {
         enemy.setVelocity(0, 0); // Stop moving
         enemy.anims.play('enemyAnimation', true); // Play animation
         dead = 1;
-        fs.writeFile('Output.txt', score, (err) => {
- 
-          // In case of a error throw err.
-          if (err) throw err;
-      })
+        
         setTimeout(() => {
           // Change 'your-page.html' to the actual HTML page you want to redirect to
-          window.location.href = 'your-page.html';
+          window.location.href = 'gameOver.html';
       }, 2000);
 
 
