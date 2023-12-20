@@ -1,8 +1,8 @@
 // Configuration for the game
 const config = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 600,
+    width: 1000,
+    height: 800,
     scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
@@ -89,13 +89,13 @@ function create() {
     repeat: -1, // Set to -1 for looping
   });
 
-  const enemy = this.physics.add.sprite(200, 200, 'enemy').setScale(0.17);
+  const enemy = this.physics.add.sprite(0, 0, 'enemy').setScale(0.17);
     this.physics.world.enable(enemy);
     enemies.add(enemy);
 }
 
 function update(time, delta) {
-    playerSpeed = 200
+    playerSpeed = 100
 
     if (dead == 0){
     handleInput.bind(this)(delta, playerSpeed);
@@ -211,7 +211,7 @@ function enemiesControl() {
       enemy.rotation = angleToPlayer;
 
       const distanceToPlayer = Phaser.Math.Distance.Between(enemy.x, enemy.y, player.x, player.y);
-      const speed = 100; // Adjust the speed as needed
+      const speed = 200; // Adjust the speed as needed
 
       if (distanceToPlayer < 10) { // Adjust the distance threshold as needed
         enemy.setVelocity(0, 0); // Stop moving
