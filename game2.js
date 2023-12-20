@@ -41,13 +41,15 @@ let background;
 
 function preload() {
   // Load assets (images and sprites)
-  this.load.image('player', 'assets/anim/kalle/reload.png');
+  //this.load.image('player', 'assets/anim/kalle/reload.png');
+  this.load.spritesheet('player', 'assets/anim/kalle/shoot.png', { frameWidth: 312, frameHeight: 206 });
   //sthis.load.image('enemy', 'assets/enemy.png');
   this.load.image('bullet', 'assets/bullet3.png');
   this.load.spritesheet('enemy', 'assets/anim/knife/spritesheet.png', { frameWidth: 329, frameHeight: 300 }); // Adjust frame sizeww
   this.load.image('background', 'assets/background2.png');
   this.load.audio('shotFired', 'assets/shot2.mp3');
   this.load.audio('backgroundMusic', 'assets/GTA4.ogg');
+
 
 
 }
@@ -66,6 +68,7 @@ function create() {
   this.cameras.main.startFollow(player);
   // Enable cursor keys for player movement
   cursors = this.input.keyboard.createCursorKeys();
+
 
   this.shotSound = this.sound.add('shotFired', { loop: false });
   this.backgroundMusic = this.sound.add('backgroundMusic');
@@ -104,6 +107,13 @@ function create() {
     repeat: -1, // Set to -1 for looping
   });
 
+  this.anims.create({
+    key: 'shootAnimation',
+    frames: this.anims.generateFrameNumbers('player', { start: 0, end: 2 }), // Adjust frame numbers
+    frameRate: 32, // Adjust frame rate
+    repeat: 1, // Set to -1 for looping
+  });
+
   const enemy = this.physics.add.sprite(0, 0, 'enemy').setScale(0.17);
     this.physics.world.enable(enemy);
     enemies.add(enemy);
@@ -115,10 +125,13 @@ function update(time, delta) {
     if (dead == 0){
     handleInput.bind(this)(delta, playerSpeed);
     lookAtCursor.bind(this)();
+
+    
     if (
       this.input.keyboard.checkDown(this.input.keyboard.addKey('SPACE'), 100) ||
       (this.input.activePointer.isDown && this.input.mousePointer.durationDown >= 100)
     ) {
+      player.anims.play('shootAnimation', true);
       this.shotSound.play();
       shootBullet.bind(this)();
     }
