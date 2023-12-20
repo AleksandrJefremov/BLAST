@@ -255,7 +255,7 @@ function enemiesControl() {
         enemy.anims.play('enemyAnimation', true); // Play animation
         dead = 1;
         player.setVelocity(0, 0);
-        fs.writeFileSync('score.txt', scoreString);
+        
         setTimeout(() => {
           // Change 'your-page.html' to the actual HTML page you want to redirect to
           window.location.href = 'gameOver.html';
